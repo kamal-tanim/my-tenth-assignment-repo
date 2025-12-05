@@ -1,0 +1,11 @@
+/* For a specific container */
+.container {
+  overflow-y: scroll;  /* enable vertical scrolling */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+/* Chrome, Safari, and Opera */
+.container::-webkit-scrollbar {
+  display: none;
+}

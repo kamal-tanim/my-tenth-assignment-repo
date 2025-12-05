@@ -11,14 +11,15 @@ const Navbar = () => {
     const navLinks = <>
 
         <li className="text-lg font-semibold"><NavLink to='/'>Home</NavLink></li>
-        <li className="text-lg font-semibold"><NavLink to='/allModels'>All Model</NavLink></li>
+        <li className="text-lg font-semibold"><NavLink to='/allModels'>All Models</NavLink></li>
         <li className="text-lg font-semibold"><NavLink to='/addModels'>Add Model</NavLink></li>
-        <li className="text-lg font-semibold"><NavLink to='/contact'>Contact</NavLink></li>
+        <li className="text-lg font-semibold"><NavLink to='/myModels'>My Models</NavLink></li>
+        <li className="text-lg font-semibold"><NavLink to='/contact'>Contact Us</NavLink></li>
         {/* <li><Link to='/'></Link></li> */}
 
     </>
     return (
-        <div className='flex justify-between items-center px-5 py-3 border-b-2'>
+        <div className='flex justify-between items-center px-5 py-2 border-b-2'>
             <div className=' flex gap-2'>
                 <div className="relative lg:hidden">
                     <MenuToggleBtn>
@@ -57,11 +58,11 @@ const Navbar = () => {
                     </div>
                 </div>
                 <div>
-                    <h2 className='font-bold text-xl text-center max-sm:w-50 max-sm:absolute max-sm:left-1/2 max-sm:-translate-x-1/2'>AI Model Inventory Manager</h2>
+                    <h2 className='font-bold text-xl text-center max-sm:w-50 max-sm:absolute max-sm:left-1/2 max-sm:-translate-x-1/2'>AI Inventory.</h2>
                 </div>
             </div>
             <div className='absolute left-1/2 -translate-x-1/2 max-sm:hidden items-center'>
-                <ul className='flex gap-3'>
+                <ul className='flex gap-5'>
                     {navLinks}
 
                 </ul>

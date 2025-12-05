@@ -7,6 +7,7 @@ import AllModel from "./Pages/AllModel";
 import Contact from "./Pages/Contact";
 import Purchase from "./Pages/Purchase";
 import Login from "./Pages/Login";
+import MyModel from "./Pages/MyModel";
 // import { Contact } from "lucide";
 
 
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
             {
                 path: 'allModels',
                 Component: AllModel
+            },
+            {
+                path: 'myModels',
+                Component: MyModel
             },
             {
                 path: 'contact',
