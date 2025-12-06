@@ -19,7 +19,7 @@ const Navbar = () => {
 
     </>
     return (
-        <div className='flex justify-between items-center px-5 py-2 border-b-2'>
+        <div className='flex justify-between items-center px-5 py-2 border-b-5 border-purple-800'>
             <div className=' flex gap-2'>
                 <div className="relative lg:hidden">
                     <MenuToggleBtn>

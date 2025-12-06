@@ -1,10 +1,10 @@
 @import "tailwindcss";
 @plugin "daisyui"{
      themes: light --default
-}
+};
 
 
 
 .active {
-     border-bottom: 2px solid #838ce5;
+     border-bottom: 2px solid rgb(0, 128, 128);
 }
