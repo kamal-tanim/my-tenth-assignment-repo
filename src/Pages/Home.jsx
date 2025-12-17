@@ -1,182 +1,213 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, useScroll } from 'framer-motion';
+import { ArrowUpRight, Activity, Shield, Users, Layers, Zap, Star, Quote } from 'lucide-react';
+
+// Sub-components (Assuming these are in your project)
 import ImageCarousel from '../Component/ImageCarousel';
 import AnimatedNumber from '../Component/AnimatedNumber';
-import card_img_1 from "../assets/images/card_img_1.png"
-import card_img_2 from "../assets/images/card_img_2.png"
-import card_img_3 from "../assets/images/card_img_3.png"
-import card_img_4 from "../assets/images/card_img_4.png"
-import card_img_5 from "../assets/images/card_img_5.png"
-import LineGraph from '../Component/TinyLineChart';
 
-
-
-
+// Assets
+import card_img_1 from "../assets/images/card_img_1.png";
+import card_img_2 from "../assets/images/card_img_2.png";
+import card_img_3 from "../assets/images/card_img_3.png";
+import card_img_4 from "../assets/images/card_img_4.png";
+import card_img_5 from "../assets/images/card_img_5.png";
 
 const Home = () => {
-    const [hovered, setHovered] = useState(false)
+    const [hovered, setHovered] = useState(false);
+    const [experiences, setExperiences] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // FIX: Correct data fetching lifecycle
+    useEffect(() => {
+        const fetchExperiences = async () => {
+            try {
+                // Assuming experience.json is in your /public folder
+                const res = await fetch('/experience.json');
+                const data = await res.json();
+                setExperiences(data);
+            } catch (error) {
+                console.error("Error loading neural signatures:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchExperiences();
+    }, []);
+
     return (
-        <div className=''>
-            {/* welcome sliders */}
-            <div className='mx-auto p-7 '>
-                <ImageCarousel></ImageCarousel>
+        <div className='relative min-h-screen bg-[#050505] text-white overflow-hidden font-sans selection:bg-blue-500 selection:text-white'>
+            
+            {/* BACKGROUND NEURAL GLOWS */}
+            <div className="fixed inset-0 z-0 pointer-events-none">
+                <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-purple-600/10 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-blue-600/10 rounded-full blur-[120px] mix-blend-screen" />
             </div>
 
-            <div className='px-10'>
-                {/* AI Model Inventory Manager */}
-
-                <div
-                    className="flex flex-col items-center justify-center h-[500px] rounded-4xl shadow-2xl bg-gradient-to-r from-[#036febef] via-[#8cd4ea] via-[#3acf82] to-[#065dffa1] shadow-gray-500 text-white "
-                    // style={{
-                    //     backgroundImage: `url(${bg2})`,
-                    //     backgroundSize: "cover",
-                    //     backgroundPosition: "center",
-                    // }}
-                    onMouseEnter={() => setHovered(true)}
+            <div className='relative z-10 container mx-auto px-6 py-20'>
+                
+                {/* HERO SECTION: CAROUSEL */}
+                <motion.div 
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 1 }}
+                    className='rounded-[3rem] overflow-hidden shadow-2xl border border-white/10 relative group'
                 >
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent z-20 pointer-events-none" />
+                    <ImageCarousel />
+                </motion.div>
 
+                {/* STATS & MAIN HEADING */}
+                <div className='mt-32 relative'>
                     <motion.div
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        viewport={{ once: false, amount: 0.3 }}
-                        className="mt-10 border-white/30 bg-white/20  backdrop-blur-lg rounded-full p-10">
-                        <h3 className="text-5xl text-center font-bold">
-                            AI Model Inventory Manager
-                        </h3>
-                    </motion.div>
-                    <motion.p
-                        initial={{ y: 50, opacity: 0 }}
-                        whileInView={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.8 }}
-                        viewport={{ once: false, amount: 0.3 }}
-                        className='text-center px-30  mt-6 font-semibold  '>The AI Model Inventory Manager lets you easily organize, track, and monitor 30+ AI models in one dashboard. View real-time performance, manage the latest models, control versions, and receive automated updates. A modern, efficient system designed to simplify AI workflows for teams and professionals.</motion.p>
-                    <div className='flex mt-10 items-center'>
-                        <motion.p
-                            className=' text-4xl text-center font-semibold'
-                            initial={{ opacity: 0, y: 50 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 1 }}
-                            viewport={{ once: false, amount: 0.3 }}
-                        ><span className='text-[60px] font-bold'><AnimatedNumber value={300} trigger={hovered} />+</span><br />Ai Models</motion.p>
-
-
-                        <motion.span
-                            className='h-20 w-0.5 bg-white rounded-full mx-25'
-                            initial={{ opacity: 0, y: 50 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 1 }}
-                            viewport={{ once: false, amount: 0.3 }}
-                        ></motion.span>
-                        <motion.p
-                            className=' text-4xl text-center font-semibold'
-                            initial={{ opacity: 0, y: 50 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 1 }}
-                            viewport={{ once: false, amount: 0.3 }}
-                        ><span className='text-[60px] font-bold'><AnimatedNumber value={40000} trigger={hovered} />+</span><br />Active Users</motion.p>
-
-                        <motion.span
-                            className='h-20 w-0.5 bg-white rounded-full mx-25'
-                            initial={{ opacity: 0, y: 50 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 1 }}
-                            viewport={{ once: false, amount: 0.3 }}
-                        ></motion.span>
-
-                        <motion.p
-                            className=' text-4xl text-center font-semibold'
-                            initial={{ opacity: 0, y: 50 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 1 }}
-                            viewport={{ once: false, amount: 0.3 }}
-                        ><span className='text-[60px] font-bold'><AnimatedNumber value={28} trigger={hovered} />+</span><br />Countries</motion.p>
-
-                    </div>
-                </div>
-
-                {/*  key features */}
-
-                <div className='mt-20 p-5 space-y-8'
-                >
-                    <motion.h3
-                        initial={{ opacity: 0, y: 70 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1.5 }}
-                        viewport={{ once: false, amount: 0 }}
-                        className='text-8xl text-white text-center font-semibold'>Key Features</motion.h3>
-                    <motion.div className='grid grid-cols-3 gap-5 text-center mt-10'
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1.5 }}
-                        viewport={{ once: false, amount: 0.3 }}
+                        onMouseEnter={() => setHovered(true)}
+                        onMouseLeave={() => setHovered(false)}
+                        className="relative overflow-hidden rounded-[4rem] bg-[#0a0a0a] border border-white/10 p-12 md:p-24 shadow-[0_0_50px_-12px_rgba(255,255,255,0.1)] group"
                     >
-                        <div className=' bg-white text-black shadow-2xl rounded-3xl p-5 space-y-2'>
-                            <img src={card_img_1} alt="" className='h-40 w-full mx-auto rounded-xl' />
-                            <h3 className=' text-2xl font-semibold'>Real-time Analytics</h3>
-                            <p>
-                                Access live metrics and insights for your models. Track performance trends, detect anomalies, and visualize important statistics instantly with interactive charts and dashboards.
-                            </p>
-                        </div>
-                        <div className=' bg-white text-black shadow-2xl rounded-3xl p-5 space-y-2 '>
-
-                            <img src={card_img_4} alt="" className='h-40 w-full mx-auto rounded-xl' />
-                            <h3 className=' text-2xl font-semibold'>Model Tracking <br />& <br />Monitoring</h3>
-                            <p>
-                                Easily track all your AI models in one place. Monitor their performance, accuracy, and usage statistics in real time. Keep a complete version history to see how each model evolves over time.
-                            </p>
-                        </div>
-                        <div className=' bg-white text-black shadow-2xl rounded-3xl p-5 space-y-2 '>
-                            <img src={card_img_2} alt="" className='h-40 w-full mx-auto rounded-xl' />
-                            <h3 className=' text-2xl font-semibold'>Secure Authentication 🔒</h3>
-                            <p>
-                                Protect your AI inventory with modern authentication methods and encrypted security layers. Ensure that only authorized users can access, edit, or deploy your models.
-                            </p>
-                        </div>
-                        <div className=' bg-white text-black shadow-2xl rounded-3xl p-5 space-y-2 '>
-                            <img src={card_img_5} alt="" className='h-40 w-full mx-auto rounded-xl' />
-                            <h3 className=' text-2xl font-semibold'>Role-based Access Control (RBAC)</h3>
-                            <p>
-                                Assign permissions and roles to different team members. Control who can view, edit, or deploy models based on their responsibilities. Customize access levels to match organizational hierarchy.
-                            </p>
-                        </div>
-                        <div className=' bg-white text-black shadow-2xl rounded-3xl p-5 space-y-2 '>
-                            <img src={card_img_3} alt="" className='h-40 w-full mx-auto rounded-xl' />
-                            <h3 className=' text-2xl font-semibold'>Version Control & Deployment</h3>
-                            <p>
-                                Manage different versions of AI models efficiently and deploy updates seamlessly without disrupting ongoing workflows. Keep track of changes to ensure reproducibility and reliability.
-                            </p>
+                        <div className="absolute inset-0 z-0 opacity-20" 
+                             style={{ backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)', backgroundSize: '40px 40px' }}>
                         </div>
 
+                        <div className="relative z-10 flex flex-col items-center text-center">
+                            <motion.div 
+                                initial={{ opacity: 0, y: 10 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 mb-8"
+                            >
+                                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                                <span className="text-[10px] font-black tracking-[0.3em] uppercase text-blue-500">Live Neural Link</span>
+                            </motion.div>
+
+                            <h3 className="text-6xl md:text-8xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40 mb-8 italic">
+                                AI Inventory<br />Manager
+                            </h3>
+
+                            <div className='grid grid-cols-1 md:grid-cols-3 gap-10 mt-20 w-full max-w-5xl'>
+                                <StatItem label="Active Models" value={300} suffix="+" hovered={hovered} />
+                                <div className="hidden md:block w-px bg-gradient-to-b from-transparent via-white/10 to-transparent" />
+                                <StatItem label="Neural Entities" value={40000} suffix="+" hovered={hovered} />
+                                <div className="hidden md:block w-px bg-gradient-to-b from-transparent via-white/10 to-transparent" />
+                                <StatItem label="Data Nodes" value={28} suffix="" hovered={hovered} />
+                            </div>
+                        </div>
                     </motion.div>
-
-
-
-
                 </div>
 
+                {/* --- 15+ USER EXPERIENCES MARQUEE --- */}
+                <div className='mt-40'>
+                    <div className='text-center mb-16'>
+                        <h2 className='text-[10px] font-black tracking-[0.5em] text-blue-500 uppercase mb-4'>Verified Experiences</h2>
+                        <h3 className='text-4xl md:text-6xl font-bold italic tracking-tighter'>Neural Signatures</h3>
+                    </div>
 
-                {/* top models  */}
-
-                <div>
-                    <h2 className='text-5xl font-bold text-amber-100 text-center px-6'>Explore the Top AI Models Powering Smarter Inventory Management</h2>
-                    <div>
-                        
+                    <div className="flex overflow-hidden group py-10 relative">
+                        {isLoading ? (
+                            <div className="w-full text-center text-white/20 italic">Synchronizing Neural Data...</div>
+                        ) : (
+                            <motion.div 
+                                animate={{ x: [0, -2500] }} 
+                                transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
+                                className="flex flex-nowrap gap-6 min-w-max"
+                            >
+                                {/* Double the data for infinite loop effect */}
+                                {[...experiences, ...experiences].map((exp, i) => (
+                                    <ExperienceCard key={i} exp={exp} />
+                                ))}
+                            </motion.div>
+                        )}
                     </div>
                 </div>
 
-                {/* ai category  */}
-
-                {/* <div className='h-auto mt-20 '>
-
-                    <div className='h-100 w-full bg-white rounded-3xl'>
-                        <LineGraph></LineGraph>
+                {/* --- CORE CAPABILITIES GRID --- */}
+                <div className='mt-40 space-y-20'>
+                    <div className='text-center'>
+                        <h2 className='text-[10px] font-black tracking-[0.5em] text-blue-500 uppercase mb-4'>Capabilities</h2>
+                        <h3 className='text-4xl md:text-7xl font-bold italic tracking-tighter'>Core Protocols</h3>
                     </div>
-                </div> */}
+
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+                        <FeatureCard title="Real-time Analytics" desc="Access live metrics and insights. Track performance trends instantly." img={card_img_1} icon={<Activity />} />
+                        <FeatureCard title="Tracking & Monitoring" desc="Monitor accuracy and usage. Keep a complete version history." img={card_img_4} icon={<Layers />} />
+                        <FeatureCard title="Secure Authentication" desc="Encrypted security layers ensuring only authorized access." img={card_img_2} icon={<Shield />} />
+                        <FeatureCard title="Role-based Access" desc="Granular permissions control to match your organizational needs." img={card_img_5} icon={<Users />} />
+                        <FeatureCard title="Version Control" desc="Seamless deployment pipelines. Rollback without disruption." img={card_img_3} icon={<Zap />} />
+                    </div>
+                </div>
+
+                {/* FOOTER BANNER */}
+                <div className='mt-60 mb-20 text-center relative'>
+                    <div className="absolute inset-0 bg-blue-500/10 blur-[120px] -z-10" />
+                    <h2 className='text-5xl md:text-8xl font-black italic tracking-tighter leading-none'>
+                        <span className="text-white/20 uppercase text-3xl block mb-4">Neural Hub v4.0</span>
+                        Powering Smarter <span className="text-blue-500">Inventory.</span>
+                    </h2>
+                </div>
             </div>
-
         </div>
     );
 };
+
+// HELPER COMPONENTS
+const StatItem = ({ label, value, suffix, hovered }) => (
+    <div className='flex flex-col items-center justify-center text-center space-y-2'>
+        <div className='text-5xl md:text-7xl font-black tracking-tighter text-white'>
+            <AnimatedNumber value={value} trigger={hovered} />
+            <span className="text-blue-600">{suffix}</span>
+        </div>
+        <p className='text-[10px] font-black uppercase tracking-[0.3em] text-white/30'>{label}</p>
+    </div>
+);
+
+const ExperienceCard = ({ exp }) => (
+    <div className="w-[380px] p-10 rounded-[2.5rem] bg-white/[0.02] border border-white/5 backdrop-blur-md hover:border-blue-500/30 transition-all group cursor-default">
+        <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-12 rounded-2xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-500 font-black italic">
+                {exp.name.charAt(0)}
+            </div>
+            <div className="text-left">
+                <h4 className="text-sm font-black text-white tracking-tight">{exp.name}</h4>
+                <p className="text-[9px] text-blue-500/60 font-black uppercase tracking-widest">{exp.role}</p>
+            </div>
+            <Quote className="ml-auto text-white/5 group-hover:text-blue-500/20 transition-colors" size={24} />
+        </div>
+        <p className="text-sm text-white/50 leading-relaxed font-medium italic mb-6">
+            "{exp.text}"
+        </p>
+        <div className="flex gap-1">
+            {[...Array(5)].map((_, j) => (
+                <Star key={j} size={10} className="fill-blue-600 text-blue-600" />
+            ))}
+        </div>
+    </div>
+);
+
+const FeatureCard = ({ title, desc, img, icon }) => (
+    <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className='group relative p-1 rounded-[2.5rem] bg-gradient-to-b from-white/10 to-transparent hover:from-blue-500/40 transition-all duration-500'
+    >
+        <div className="bg-[#0a0a0a] rounded-[2.4rem] p-10 h-full flex flex-col overflow-hidden relative">
+            <div className="mb-8 flex items-center justify-between">
+                <div className="p-4 bg-white/5 rounded-2xl border border-white/10 text-blue-500 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                    {icon}
+                </div>
+                <ArrowUpRight className="text-white/10 group-hover:text-white transition-colors" />
+            </div>
+
+            <h3 className='text-2xl font-black italic mb-4 text-white tracking-tight text-left'>{title}</h3>
+            <p className='text-white/40 text-sm leading-relaxed mb-10 group-hover:text-white/60 transition-colors text-left'>
+                {desc}
+            </p>
+
+            <div className="mt-auto rounded-3xl overflow-hidden h-44 w-full relative border border-white/5">
+                <img src={img} alt={title} className='h-full w-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700' />
+                <div className="absolute inset-0 bg-blue-500/10 group-hover:bg-transparent transition-all" />
+            </div>
+        </div>
+    </motion.div>
+);
 
 export default Home;

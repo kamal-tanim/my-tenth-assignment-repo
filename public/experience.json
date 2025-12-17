@@ -1,0 +1,77 @@
+[
+  {
+    "name": "Nexus-7",
+    "role": "Supply Lead",
+    "text": "Efficiency increased by 40% using the tracking protocol."
+  },
+  {
+    "name": "Dr. Aris",
+    "role": "AI Researcher",
+    "text": "The most intuitive neural version control I've deployed."
+  },
+  {
+    "name": "C-Commander",
+    "role": "Logistics",
+    "text": "Secure auth layers are military grade. Impressive."
+  },
+  {
+    "name": "Sarah K.",
+    "role": "Data Scientist",
+    "text": "Real-time analytics saved us weeks of manual reporting."
+  },
+  {
+    "name": "Aero-Tech",
+    "role": "Enterprise",
+    "text": "Seamless integration with our existing neural backbone."
+  },
+  {
+    "name": "Identity_01",
+    "role": "Beta Tester",
+    "text": "The UI feels like the future of inventory management."
+  },
+  {
+    "name": "Quantum-Dev",
+    "role": "DevOps",
+    "text": "Zero downtime during model rollbacks. Truly robust."
+  },
+  {
+    "name": "L. Vancroft",
+    "role": "Security",
+    "text": "Role-based access is granular and perfectly executed."
+  },
+  {
+    "name": "Z-Neural",
+    "role": "Startup",
+    "text": "Scaling from 1 to 100 models was effortless."
+  },
+  {
+    "name": "Orbital-X",
+    "role": "GovTech",
+    "text": "Verified encryption that exceeds standard protocols."
+  },
+  {
+    "name": "M. Chen",
+    "role": "Manager",
+    "text": "Visualizing complex datasets is now a single-click task."
+  },
+  {
+    "name": "Novus AI",
+    "role": "Infrastructure",
+    "text": "Low latency inference tracking across all regions."
+  },
+  {
+    "name": "Ghost_User",
+    "role": "Freelancer",
+    "text": "The aesthetic alone makes me want to work more."
+  },
+  {
+    "name": "Prime-Core",
+    "role": "Operations",
+    "text": "Unified dashboard has eliminated all data silos."
+  },
+  {
+    "name": "Vector-9",
+    "role": "Architecture",
+    "text": "Reliable, fast, and secure. Everything we needed."
+  }
+]

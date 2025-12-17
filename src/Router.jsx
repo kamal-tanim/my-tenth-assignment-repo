@@ -9,6 +9,7 @@ import Purchase from "./Pages/Purchase";
 import Login from "./Pages/Login";
 import MyModel from "./Pages/MyModel";
 import Register from "./Pages/Register";
+import PrivateRoute from "./privateRoute/PrivateRoute";
 // import { Contact } from "lucide";
 
 
@@ -17,25 +18,30 @@ export const router = createBrowserRouter([
     {
         Component: RootLayout,
         children: [
-            {
+            {   
+                path:'/',
                 index: true,
                 Component: Home
             },
             {
                 path: 'profile',
-                Component: Profile
+                element:<PrivateRoute><Profile></Profile></PrivateRoute>
             },
             {
                 path: 'addModels',
-                Component: AddModels
+                element:<PrivateRoute><AddModels></AddModels></PrivateRoute>
             },
             {
                 path: 'allModels',
-                Component: AllModel
+                element:<PrivateRoute><AllModel></AllModel></PrivateRoute>,
+                loader: () => fetch('http://localhost:3000/models')
+                .then(res => res.json())
+
             },
             {
                 path: 'myModels',
-                Component: MyModel
+                element:<PrivateRoute><MyModel></MyModel></PrivateRoute>
+
             },
             {
                 path: 'contact',
@@ -56,7 +62,7 @@ export const router = createBrowserRouter([
             {
                 path: 'register',
                 Component: Register
-                
+
             },
         ]
     }
