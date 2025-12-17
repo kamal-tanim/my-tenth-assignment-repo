@@ -9,7 +9,7 @@ const Cart = () => {
       <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
         <div className="indicator">
           <FaOpencart className='w-10 h-7'></FaOpencart>
-          <span className="badge badge-sm indicator-item">8</span>
+          <span className="badge badge-sm indicator-item border-blue-500 ">8</span>
         </div>
       </div>
       <div

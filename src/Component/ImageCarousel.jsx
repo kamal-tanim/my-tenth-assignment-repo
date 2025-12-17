@@ -19,6 +19,8 @@ const ImageCarousel = () => {
         disableOnInteraction: false,
         pauseOnMouseEnter: true,
       }}
+
+      
     >
       <SwiperSlide className="p-5 bg-gradient-to-r from-orange-400 via-amber-300 to-red-400 rounded-xl" >
         <motion.div

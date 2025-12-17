@@ -8,6 +8,7 @@ import Contact from "./Pages/Contact";
 import Purchase from "./Pages/Purchase";
 import Login from "./Pages/Login";
 import MyModel from "./Pages/MyModel";
+import Register from "./Pages/Register";
 // import { Contact } from "lucide";
 
 
@@ -47,6 +48,15 @@ export const router = createBrowserRouter([
             {
                 path: 'profile',
                 Component: Profile
+            },
+            {
+                path: 'login',
+                Component: Login
+            },
+            {
+                path: 'register',
+                Component: Register
+                
             },
         ]
     }
