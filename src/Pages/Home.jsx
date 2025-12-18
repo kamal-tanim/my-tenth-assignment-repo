@@ -2,11 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, useScroll } from 'framer-motion';
 import { ArrowUpRight, Activity, Shield, Users, Layers, Zap, Star, Quote } from 'lucide-react';
 
-// Sub-components (Assuming these are in your project)
 import ImageCarousel from '../Component/ImageCarousel';
 import AnimatedNumber from '../Component/AnimatedNumber';
-
-// Assets
 import card_img_1 from "../assets/images/card_img_1.png";
 import card_img_2 from "../assets/images/card_img_2.png";
 import card_img_3 from "../assets/images/card_img_3.png";
@@ -18,7 +15,6 @@ const Home = () => {
     const [experiences, setExperiences] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // FIX: Correct data fetching lifecycle
     useEffect(() => {
         const fetchExperiences = async () => {
             try {
@@ -37,7 +33,7 @@ const Home = () => {
     }, []);
 
     return (
-        <div className='relative min-h-screen bg-[#050505] text-white overflow-hidden font-sans selection:bg-blue-500 selection:text-white'>
+        <div className='relative min-h-screen bg-[#050505] text-white overflow-hidden font-sans selection:bg-blue-500 selection:text-white pt-2.5'>
             
             {/* BACKGROUND NEURAL GLOWS */}
             <div className="fixed inset-0 z-0 pointer-events-none">

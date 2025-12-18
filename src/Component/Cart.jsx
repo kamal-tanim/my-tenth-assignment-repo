@@ -37,12 +37,6 @@ const Cart = () => {
             <span className="text-xl font-bold text-white tracking-tight">8 Models Queued</span>
           </div>
 
-          {/* Pricing Info */}
-          <div className="space-y-1">
-            <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Estimated Value</p>
-            <span className="text-2xl font-black text-white">$999<span className="text-blue-500 text-sm italic">.00</span></span>
-          </div>
-
           {/* Action Button */}
           <div className="pt-2">
             <NavLink 

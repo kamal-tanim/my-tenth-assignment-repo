@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom'; // 
 import { motion, AnimatePresence } from 'framer-motion';
+import useAuth from '../hooks/useAuth';
+import useAxiosSecure from '../hooks/useAxiosSecure';
+
 
 const Modal = ({ model }) => {
     const [modelData, setModelData] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
+    const { user } = useAuth();
+    const axiosSecure = useAxiosSecure();
+    const email = user?.email;
+
+
 
     useEffect(() => {
         setMounted(true);
@@ -13,50 +21,70 @@ const Modal = ({ model }) => {
     }, []);
 
     const handleOpen = async (e) => {
-        e.stopPropagation(); 
+        e.stopPropagation();
         setIsOpen(true);
         setTimeout(() => {
             setModelData({
-                name: model.name || "NEURAL-GEN X1",
-                framework: model.framework || "PyTorch",
-                useCase: model.useCase || "NLP",
-                dataset: "CommonCrawl 70B", 
-                purchased: model.purchased || "0",
-                createdBy: "Alpha Research",
-                createdAt: "2025-01-10",
-                description: "This architecture is engineered for high-performance inference. It utilizes a custom attention mechanism to reduce latency by 40% while maintaining state-of-the-art accuracy.",
-                image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1600"
+                name: model.name,
+                framework: model.framework,
+                useCase: model.useCase,
+                dataset: model.dataset,
+                rating: model.rating,
+                createdBy: model.createdBy,
+                createdAt: model.createdAt,
+                description: model.description,
+                image: model.image,
+                uploadedBy: model.insertedByEmail
             });
         }, 300);
     };
+
+
+    const cartData = {
+        modelId: model._id,
+        name: model.name,
+        image: model.image,
+        createdBy: model.createdBy,
+        buyerEmail: user.email,
+        uploadedBy: model.insertedByEmail
+    }
+
+    const handlePurchase = (uploaderEmail) => {
+        // console.log('btn clicked')
+        if (email !== uploaderEmail) {
+            // console.log('you can make a purchase', cartData)
+            axiosSecure.post('/cartModels', cartData)
+            .then(res =>{
+                console.log('successful added model:', res.data)
+            })
+        }
+        else {
+            console.log('what kind of idiot you are to want to purchase own uploaded model')
+        }
+    }
     const ModalContent = () => (
         <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setIsOpen(false)}
                 className="absolute inset-0 bg-black/90 backdrop-blur-sm"
             />
-            <motion.div 
+            <motion.div
                 initial={{ scale: 0.9, opacity: 0, y: 50 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.9, opacity: 0, y: 50 }}
                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
                 className="relative w-full max-w-[90vw] h-[85vh] bg-[#0a0a0a] rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row border border-white/10"
             >
-                <button 
-                    onClick={() => setIsOpen(false)}
-                    className="absolute top-6 right-6 z-50 w-10 h-10 bg-white/10 hover:bg-red-500 rounded-full text-white transition-colors flex items-center justify-center"
-                >
-                    ✕
-                </button>
+
 
                 {modelData ? (
                     <>
                         <div className="md:w-1/2 relative h-1/3 md:h-full bg-black">
-                            <img 
-                                src={modelData.image} 
+                            <img
+                                src={modelData.image}
                                 className="w-full h-full object-cover opacity-70"
                                 alt="Visual"
                             />
@@ -72,7 +100,15 @@ const Modal = ({ model }) => {
                         </div>
                         <div className="md:w-1/2 p-8 md:p-12 text-white flex flex-col overflow-y-auto">
                             <div className="mb-8">
-                                <h3 className="text-blue-400 font-bold text-xs uppercase tracking-[0.3em] mb-2">Specifications</h3>
+                                <div className='flex justify-between items-center mb-4'>
+                                    <h3 className="text-blue-400 font-bold text-xs uppercase tracking-[0.3em] mb-2">Specifications</h3>
+                                    <div>
+                                        <p className="text-xs text-gray-500 italic mt-1">
+                                            Uploaded by: <span className="font-medium text-gray-700">{modelData.uploadedBy}</span>
+                                        </p>
+                                    </div>
+                                </div>
+
                                 <p className="text-2xl font-light leading-snug">
                                     Optimized for <strong className="text-white font-bold">{modelData.useCase}</strong> workflows.
                                 </p>
@@ -84,8 +120,8 @@ const Modal = ({ model }) => {
                                     <p className="text-xl font-bold">{modelData.dataset}</p>
                                 </div>
                                 <div>
-                                    <p className="text-[10px] uppercase text-gray-500 font-bold tracking-widest">Purchased</p>
-                                    <p className="text-xl font-bold">{modelData.purchased}</p>
+                                    <p className="text-[10px] uppercase text-gray-500 font-bold tracking-widest">Rating</p>
+                                    <p className="text-xl font-bold">{modelData.rating}</p>
                                 </div>
                                 <div>
                                     <p className="text-[10px] uppercase text-gray-500 font-bold tracking-widest">Creator</p>
@@ -102,8 +138,10 @@ const Modal = ({ model }) => {
                             </p>
 
                             <div className="mt-auto flex gap-3">
-                                <button className="flex-1 py-4 bg-white text-black font-black uppercase text-sm rounded-xl hover:bg-gray-200 transition-colors">
-                                    Purchase Access
+                                <button
+                                    onClick={() => handlePurchase(modelData.insertedByEmail)}
+                                    className="flex-1 py-4 bg-white text-black font-black uppercase text-sm rounded-xl hover:bg-gray-200 transition-colors">
+                                    Add to Cart
                                 </button>
                                 <button onClick={() => setIsOpen(false)} className="px-6 py-4 border border-white/20 text-white font-bold uppercase text-xs rounded-xl hover:bg-white/5">
                                     Close
@@ -122,7 +160,7 @@ const Modal = ({ model }) => {
 
     return (
         <>
-            <button 
+            <button
                 onClick={handleOpen}
                 className="w-full py-2 bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600 hover:text-white transition-all rounded-lg font-bold uppercase text-xs tracking-widest"
             >

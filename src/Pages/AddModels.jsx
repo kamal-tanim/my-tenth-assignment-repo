@@ -3,43 +3,65 @@ import { FaPlus, FaRocket, FaInfoCircle } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { InputField } from '../assets/Styles/styles';
 import useAxiosSecure from '../hooks/useAxiosSecure';
+import useAuth from '../hooks/useAuth';
+import axios from 'axios';
 
 const AddModels = () => {
     const axiosSecure = useAxiosSecure();
+    const { user } = useAuth()
 
     const handleAddModel = e => {
         e.preventDefault();
         const form = e.target;
-        const data = {
-            name: form.modelName.value,
-            framework: form.framework.value,
-            useCase: form.useCase.value,
-            dataset: form.dataset.value,
-            image: form.image.value,
-            createdBy: form.createdBy.value,
-            createdAt: form.createdAt.value,
-            rating: form.rating.value,
-            description: form.description.value,
-        }
 
-        axiosSecure.post('/model', data)
-            .then(res => {
-                console.log("Model initialized:", res.data)
-                alert("Model Successfully Uploaded to the Archive.");
+
+        const modelImgFile = form.photo.files[0];
+        const formData = new FormData();
+        formData.append('image', modelImgFile)
+        const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_img_host_key}`
+
+        axios.post(image_API_URL, formData)
+            .then(imgRes => {
+                const imgUrl = imgRes.data.data.url;
+                console.log(imgUrl)
+
+                const data = {
+                    name: form.modelName.value,
+                    framework: form.framework.value,
+                    useCase: form.useCase.value,
+                    dataset: form.dataset.value,
+                    image: imgUrl,
+                    createdBy: form.createdBy.value,
+                    createdAt: form.createdAt.value,
+                    rating: form.rating.value,
+                    description: form.description.value,
+                    insertedByEmail: form.insertedByEmail.value,
+                }
+
+                // console.log(data);
+                axiosSecure.post('/model', data)
+                    .then(res => {
+                        console.log("Model initialized:", res.data)
+                        alert("Model Successfully Uploaded to the Archive.");
+
+
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
             })
-            .catch(error => {
-                console.log(error);
-            })
+
+
     }
 
     return (
-        <div className='min-h-screen bg-[#050505] pt-32 pb-20 px-4 flex justify-center items-center relative overflow-hidden'>
-            
+        <div className='min-h-screen bg-[#0d1117] pt-32 pb-20 px-4 flex justify-center items-center relative overflow-hidden'>
+
             {/* Background Glows */}
             <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
             <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px] pointer-events-none" />
 
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full max-w-5xl z-10"
@@ -53,16 +75,17 @@ const AddModels = () => {
 
                 <form
                     onSubmit={handleAddModel}
-                    className="p-8 md:p-12 bg-white/5 border border-white/10 backdrop-blur-2xl rounded-[3rem] shadow-2xl grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 relative overflow-hidden"
+                    className="p-8 md:p-12 bg-white/5 border border-white/10 backdrop-blur-2xl rounded-[3rem] shadow-2xl grid grid-cols-2 md:grid-cols-2 gap-x-12 gap-y-8 relative overflow-hidden"
                 >
                     {/* Decorative Grid Lines */}
-                    <div className="absolute inset-0 opacity-5 pointer-events-none" 
-                         style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
+                    <div className="absolute inset-0 opacity-5 pointer-events-none"
+                        style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
 
                     <div className="col-span-full flex items-center gap-2 mb-4 border-b border-white/10 pb-4">
                         <FaInfoCircle className="text-blue-500" />
                         <span className="text-xs font-bold tracking-widest text-white/60 uppercase">System Metadata</span>
                     </div>
+
 
                     {/* Left Column */}
                     <InputField>
@@ -70,7 +93,7 @@ const AddModels = () => {
                             <input required type="text" className="input !text-white border-white/20" name='modelName' />
                             <span className="highlight" />
                             <span className="bar !bg-blue-500" />
-                            <label className="!text-white/50 group-focus:!text-blue-400">Model ID / Name</label>
+                            <label className="!text-white/50 group-focus:!text-blue-400">Model Name</label>
                         </div>
                     </InputField>
 
@@ -79,7 +102,7 @@ const AddModels = () => {
                             <input required type="text" className="input !text-white border-white/20" name="framework" />
                             <span className="highlight" />
                             <span className="bar !bg-blue-500" />
-                            <label className="!text-white/50">Core Framework (PyTorch/TF)</label>
+                            <label className="!text-white/50">Core Framework</label>
                         </div>
                     </InputField>
 
@@ -101,22 +124,39 @@ const AddModels = () => {
                         </div>
                     </InputField>
 
-                    {/* Right Column */}
                     <InputField>
-                        <div className="group">
-                            <input required type="text" className="input !text-white border-white/20" name="image" />
-                            <span className="highlight" />
-                            <span className="bar !bg-blue-500" />
-                            <label className="!text-white/50">Visual Asset URL</label>
+                        <div className="group relative">
+                            <input
+                                required
+                                type="file"
+                                name="photo"
+                                className="input !text-white border-white/20 block w-full cursor-pointer file:mr-10"
+                            />
                         </div>
                     </InputField>
 
+                    {/* Right Column */}
+
+
+
                     <InputField>
                         <div className="group">
-                            <input required type="email" className="input !text-white border-white/20" name="createdBy" />
+                            <input required type="text" className="input !text-white border-white/20" name="createdBy" />
                             <span className="highlight" />
                             <span className="bar !bg-blue-500" />
-                            <label className="!text-white/50">Developer Signature (Email)</label>
+                            <label className="!text-white/50">Created By</label>
+                        </div>
+                    </InputField>
+                    <InputField>
+                        <div className="group">
+                            <p className="!text-white/50 text-xl">Inserted By</p>
+                            <input
+                                required
+                                type="email"
+                                className="input !text-white border-white/20" name="insertedByEmail"
+                                defaultValue={user.email}
+                                readOnly
+                            />    
                         </div>
                     </InputField>
 
@@ -130,14 +170,14 @@ const AddModels = () => {
 
                     <InputField>
                         <div className="group">
-                            <input required type="number" className="input !text-white border-white/20" name="rating" step="0.1" />
+                            <input required type="number" min='1' max='5' className="input !text-white border-white/20" name="rating" step="0.1" />
                             <span className="highlight" />
                             <span className="bar !bg-blue-500" />
                             <label className="!text-white/50">Performance Rating (1-5)</label>
                         </div>
                     </InputField>
 
-                    <div className="col-span-full">
+                    <div className="">
                         <InputField>
                             <div className="group">
                                 <textarea required className="input !text-white border-white/20 min-h-[100px] pt-4" name="description"></textarea>
@@ -150,8 +190,8 @@ const AddModels = () => {
 
                     {/* Futuristic Submit Button */}
                     <div className="col-span-full flex justify-center mt-6">
-                        <button 
-                            type='submit' 
+                        <button
+                            type='submit'
                             className="group relative px-12 py-4 bg-blue-600 rounded-full font-bold uppercase tracking-widest text-white overflow-hidden shadow-[0_0_20px_rgba(37,99,235,0.4)] transition-all hover:scale-105 active:scale-95"
                         >
                             <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />

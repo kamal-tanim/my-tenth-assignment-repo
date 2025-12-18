@@ -9,6 +9,7 @@ import Modal from '../Component/Modal';
 const AllModel = () => {
     const models = useLoaderData();
 
+
     return (
         <div className='min-h-screen bg-[#050505] pt-32 pb-20 px-10 text-white'>
             <div className="fixed top-0 left-1/4 w-[400px] h-[400px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
@@ -24,7 +25,7 @@ const AllModel = () => {
                         Neural <span className="text-blue-500">Archive</span>
                     </h2>
                     <p className="text-white/40 tracking-[0.3em] uppercase text-xs font-bold mt-2">
-                        Exploring {models.length} deployment-ready architectures
+                        Exploring <span className='text-xl text-blue-500'>{models.length}</span> deployment-ready architectures
                     </p>
                 </motion.div>
 
@@ -59,8 +60,8 @@ const AllModel = () => {
                                 <div className="relative h-48 w-full bg-[#111] overflow-hidden">
                                     <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10" />
                                     <img 
-                                        src={`https://api.dicebear.com/7.x/identicon/svg?seed=${model.name}`} 
-                                        alt="tech-pattern" 
+                                        src={model.image}
+                                        alt="" 
                                         className='w-full h-full object-cover opacity-30 group-hover:scale-110 transition-transform duration-700 group-hover:opacity-50' 
                                     />
                                     <div className="absolute top-4 right-4 z-20 bg-blue-600/20 backdrop-blur-md border border-blue-500/30 px-3 py-1 rounded-full">
@@ -72,13 +73,12 @@ const AllModel = () => {
                                         <h3 className="text-2xl font-bold tracking-tight text-white group-hover:text-blue-400 transition-colors">
                                             {model.name}
                                         </h3>
-                                        <p className="text-xs text-white/30 font-mono uppercase tracking-widest mt-1">ID: {model._id?.slice(-8) || 'N/A'}</p>
                                     </div>
 
                                     <div className="space-y-3">
                                         <div className="flex items-center gap-3 text-white/60">
                                             <Box size={16} className="text-blue-500" />
-                                            <p className='text-sm font-medium'>Use Case: <span className="text-white">{model.useCase}</span></p>
+                                            <p className='text-sm font-medium'>Use Case: <span className="text-white uppercase">{model.useCase}</span></p>
                                         </div>
                                         <div className="flex items-center gap-3 text-white/60">
                                             <ShoppingBag size={16} className="text-blue-500" />
