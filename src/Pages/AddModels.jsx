@@ -5,10 +5,18 @@ import { InputField } from '../assets/Styles/styles';
 import useAxiosSecure from '../hooks/useAxiosSecure';
 import useAuth from '../hooks/useAuth';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const AddModels = () => {
     const axiosSecure = useAxiosSecure();
     const { user } = useAuth()
+
+    const today = new Date();
+    const defaultDateTime = new Date(
+        today.getTime() - today.getTimezoneOffset() * 60000
+    ).toISOString().slice(0, 16);
+
+
 
     const handleAddModel = e => {
         e.preventDefault();
@@ -32,7 +40,7 @@ const AddModels = () => {
                     dataset: form.dataset.value,
                     image: imgUrl,
                     createdBy: form.createdBy.value,
-                    createdAt: form.createdAt.value,
+                    createdAt: defaultDateTime,
                     rating: form.rating.value,
                     description: form.description.value,
                     insertedByEmail: form.insertedByEmail.value,
@@ -42,7 +50,13 @@ const AddModels = () => {
                 axiosSecure.post('/model', data)
                     .then(res => {
                         console.log("Model initialized:", res.data)
-                        alert("Model Successfully Uploaded to the Archive.");
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Model has been added to the database.",
+                            icon: "success",
+                            confirmButtonColor: "#3085d6",
+                            confirmButtonText: "Great!"
+                        });
 
                     })
                     .catch(error => {
@@ -147,8 +161,8 @@ const AddModels = () => {
                         </div>
                     </InputField>
 
-                     {/* here 7  */}
-                     <InputField>
+                    {/* here 7  */}
+                    <InputField>
                         <div className="group">
                             <input required type="number" min='1' max='5' className="input !text-white border-white/20" name="rating" step="0.1" />
                             <span className="highlight" />
@@ -156,19 +170,19 @@ const AddModels = () => {
                             <label className="!text-white/50">Performance Rating (1-5)</label>
                         </div>
                     </InputField>
-                    
+
 
                     <InputField>
                         <div className="group">
-                            <input required type="datetime-local" className="input !text-white border-white/20 [color-scheme:dark]" name="createdAt" />
+                            <input required type="datetime-local" className="input !text-white border-white/20 [color-scheme:dark]" name="createdAt" defaultValue={defaultDateTime} readOnly />
                             <span className="highlight" />
                             <span className="bar !bg-blue-500" />
                         </div>
                     </InputField>
 
 
-                        {/* here 9 */}
-                        <InputField>
+                    {/* here 9 */}
+                    <InputField>
                         <div className="group">
                             <p className="!text-white/50 text-xl">Inserted By</p>
                             <input
@@ -177,10 +191,10 @@ const AddModels = () => {
                                 className="input !text-white border-white/20" name="insertedByEmail"
                                 defaultValue={user.email}
                                 readOnly
-                            />    
+                            />
                         </div>
                     </InputField>
-                    
+
 
                     <div className="">
                         <InputField>

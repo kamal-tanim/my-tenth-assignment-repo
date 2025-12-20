@@ -13,13 +13,17 @@ const Purchase = () => {
     const { user } = useAuth();
     const [purchasedModels, setPurchasedModels] = useState([])
     const email = user?.email;
-
+    console.log(email);
     useEffect(() => {
         axiosSecure.get(`/cartModels/email/${email}`)
             .then(res => {
-                // console.log('purchase', res.data);
-                setPurchasedModels(res.data)
+                
+                setPurchasedModels(res.data);
             })
+            .catch(err => {
+                console.error("Error fetching cart models:", err);
+            });
+    
     }, [axiosSecure, email]);
 
     const handleCartDelete = (id) => {
@@ -43,7 +47,7 @@ const Purchase = () => {
                             icon: "success"
                         });
 
-                        const remainingCartModels = purchasedModels.filter(cartModel => cartModel._id !== id );
+                        const remainingCartModels = purchasedModels.filter(cartModel => cartModel._id !== id);
                         setPurchasedModels(remainingCartModels)
                     })
                     .catch(err => {

@@ -6,26 +6,53 @@ import Checkbox from '../Component/Checkbox';
 import SocialAuthentication from '../Component/SocialAuthentication';
 import useAuth from '../hooks/useAuth';
 import { FaUserPlus, FaFingerprint, FaShieldAlt, FaIdCard, FaArrowRight } from 'react-icons/fa';
+import axios from 'axios';
 
 const Register = () => {
-    const { registerUser } = useAuth();
+    const { registerUser, updateUser, setUser } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
 
     const handleRegister = (e) => {
         e.preventDefault();
-        const email = e.target.email.value;
-        const password = e.target.password.value;
-        const photoURL = e.target.imgUrl.value;
+        const form = e.target;
 
-        registerUser(email, password, photoURL)
-            .then((res) => {
-                navigate(location?.state);
-                console.log(res.user);
+        const email = form.email.value;
+        const password = form.password.value
+        const firstName = form.firstName.value;
+        const lastName = form.lastName.value;
+
+        const name = `${firstName} ${lastName}`.trim();
+        console.log(name);
+
+        registerUser(email, password)
+            .then(() => {
+
+                const userImage = form.photo.files[0];
+                const formdata = new FormData();
+                formdata.append('image', userImage)
+                const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_img_host_key}`
+                axios.post(image_API_URL, formdata)
+                    .then(result => {
+                        const imgUrl = result.data.data.url;
+                        console.log(imgUrl);
+                        const updatedUser = { displayName: name, photoURL: imgUrl } 
+                        updateUser(updatedUser)
+                            .then(() => {
+                                navigate(location?.state);
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            })
+
+                    })
+
             })
             .catch((error) => {
                 console.log(error);
             });
+
+
     };
 
     return (
@@ -87,12 +114,16 @@ const Register = () => {
                             onSubmit={handleRegister}>
                             {/* Inputs */}
                             <div className="space-y-4">
-                                <InputField icon={<FaIdCard />} placeholder="Neural Email" name="email" type="email" />
-                                <InputField icon={<FaShieldAlt />} placeholder="Access Key" name="password" type="password" />
-                                <InputField icon={<FaIdCard />} placeholder="Avatar Link" name="imgUrl" type="text" />
+                                <div className='flex space-x-2'>
+                                    <InputField icon={<FaIdCard />} placeholder="First Name" name="firstName" type="text" />
+                                    <InputField icon={<FaIdCard />} placeholder="Neural Email" name="lastName" type="text" />
+                                </div>
+                                <InputField icon={<FaIdCard />} placeholder="Your Email" name="email" type="email" />
+                                <InputField icon={<FaShieldAlt />} placeholder="Password" name="password" type="password" />
+                                <InputField icon={<FaIdCard />} placeholder="Upload a Image" name="photo" type="file" />
                             </div>
 
-                            <div className='flex items-center bg-white/[0.03] border border-white/5 p-5 w-full gap-x-4 rounded-3xl transition-all hover:bg-white/[0.05]'>
+                            <div className='flex items-center bg-white/[0.03] border border-white/5 p-5 w-full gap-x-4 rounded-3xl transition-all hover:bg-white/[0.05] mt-5'>
                                 <Checkbox />
                                 <p className='text-[10px] text-white/40 font-bold uppercase tracking-wider text-left'>
                                     Confirm neural signature storage and <span className="text-blue-500">Clearance Terms</span>.
@@ -100,7 +131,7 @@ const Register = () => {
                             </div>
                             <button className="group mt-10 w-full py-5 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-[0.4em] transition-all hover:bg-blue-600 hover:text-white shadow-xl hover:shadow-blue-600/20 active:scale-[0.98]">
                                 <span className="flex items-center justify-center gap-3">
-                                    <FaUserPlus /> Initialize Link
+                                    <FaUserPlus /> Register
                                 </span>
                             </button>
                         </form>
@@ -119,7 +150,7 @@ const Register = () => {
                             className="group flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.3em] text-blue-500 hover:text-white transition-all duration-300"
                         >
                             Login here
-                           
+
                         </Link>
                     </div>
 

@@ -28,7 +28,7 @@ const Cart = () => {
 
   return (
     <div className="dropdown dropdown-end">
-      {/* Trigger Button */}
+
       <div
         tabIndex={0}
         role="button"

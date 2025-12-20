@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
 import { AuthInputField } from '../assets/Styles/styles';
@@ -8,7 +8,7 @@ import { FaShieldAlt, FaKey } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 
 const Login = () => {
-    const { loginUser } = useAuth();
+    const { loginUser, resetPassword } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -42,6 +42,52 @@ const Login = () => {
             });
     }
 
+    const emailRef = useRef();
+
+    const handleResetPassword = () => {
+        const email = emailRef.current.value
+        // console.log('reset email', email)
+        resetPassword(email)
+            .then((res) => {
+                Swal.fire({
+                    title: 'Check Your Inbox',
+                    text: 'A secure reset link is on its way to your email.',
+                    icon: 'info',
+                    iconColor: '#a855f7', // Aesthetic Lavender
+                    background: '#ffffff',
+                    showConfirmButton: true,
+                    confirmButtonText: 'Got it',
+                    confirmButtonColor: '#6366f1', // Indigo Indigo
+                    buttonsStyling: true,
+
+                    // Aesthetic Backdrop (Blur effect)
+                    backdrop: `
+    rgba(99, 102, 241, 0.1)
+    url("https://www.transparenttextures.com/patterns/cubes.png")
+    left top
+    no-repeat
+  `,
+
+                    // Custom Styling for the popup itself
+                    customClass: {
+                        popup: 'my-aesthetic-popup-class',
+                        title: 'my-aesthetic-title-class'
+                    },
+
+                    // Animation from Animate.css (Optional)
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInUp animate__faster'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutDown animate__faster'
+                    }
+                });
+            })
+            .catch(err => {
+                console.log(err)
+            })
+
+    }
     return (
         <div className="min-h-screen bg-[#050505] flex items-center justify-center p-6 relative overflow-hidden">
 
@@ -68,7 +114,7 @@ const Login = () => {
                         <SocialAuthentication />
                     </div>
 
-                    <form onSubmit={handleLogin}>
+                    <form onSubmit={handleLogin} className='w-full'>
 
                         <div className="flex items-center w-full mb-8 gap-4">
                             <div className="h-px bg-white/10 flex-grow" />
@@ -79,26 +125,28 @@ const Login = () => {
                         {/* Form Inputs */}
                         <div className="w-full space-y-4">
                             <AuthInputField>
-                                <input placeholder="Neural ID (Email)" name='email' type="text" className="input !bg-white/5 !border-white/10 !text-white placeholder:text-white/20" required />
+                                <input placeholder="Neural ID (Email)" name='email' type="text" className="input !bg-white/5 !border-white/10 !text-white placeholder:text-white/20" ref={emailRef} required />
                             </AuthInputField>
                             <AuthInputField>
                                 <input placeholder="Passkey" name='password' type="Password" className="input !bg-white/5 !border-white/10 !text-white placeholder:text-white/20" required />
                             </AuthInputField>
                         </div>
 
-                        <button type="button" className="text-[10px] font-bold uppercase tracking-widest text-blue-400/60 mt-4 hover:text-blue-400 transition-colors">
-                            Recover Access Key
+                        <button
+                            onClick={handleResetPassword}
+                            type="button" className="text-[10px] font-bold uppercase tracking-widest text-blue-400/60 mt-4 hover:text-blue-400 transition-colors">
+                            Forget Password
                         </button>
 
                         <button className="group mt-8 w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] active:scale-[0.98] transition-all shadow-[0_10px_30px_rgba(37,99,235,0.3)] hover:shadow-blue-500/40 relative overflow-hidden">
                             <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                             <span className="relative z-10 flex items-center justify-center gap-2 uppercase">
-                                Authorize Login
+                                Login
                             </span>
                         </button>
 
                         <p className="mt-8 text-white/30 text-xs font-medium tracking-tight">
-                            New entity? <Link state={location?.state} to='/register' className='text-blue-400 hover:underline'>Register identity</Link>
+                            New to our website? <Link state={location?.state} to='/register' className='text-blue-400 hover:underline'>Register identity</Link>
                         </p>
                     </form>
                 </div>
