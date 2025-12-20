@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'; //
 import { motion, AnimatePresence } from 'framer-motion';
 import useAuth from '../hooks/useAuth';
 import useAxiosSecure from '../hooks/useAxiosSecure';
+import Swal from 'sweetalert2';
 
 
 const Modal = ({ model }) => {
@@ -34,29 +35,95 @@ const Modal = ({ model }) => {
                 createdAt: model.createdAt,
                 description: model.description,
                 image: model.image,
-                uploadedBy: model.insertedByEmail
+                insertedByEmail: model.insertedByEmail
             });
         }, 300);
     };
 
+    const now = new Date();
 
     const cartData = {
         modelId: model._id,
         name: model.name,
         image: model.image,
+        useCase: model.useCase,
         createdBy: model.createdBy,
         buyerEmail: user.email,
-        uploadedBy: model.insertedByEmail
+        uploadedBy: model.insertedByEmail,
+        addedAt: `${now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/ /g, '-')} | ${now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}`
     }
-
     const handlePurchase = (uploaderEmail) => {
-        // console.log('btn clicked')
         if (email !== uploaderEmail) {
-            // console.log('you can make a purchase', cartData)
             axiosSecure.post('/cartModels', cartData)
-            .then(res =>{
-                console.log('successful added model:', res.data)
-            })
+                .then(res => {
+                    // console.log('successful added model:', res.data)
+                    setIsOpen(false)
+                    Swal.fire({
+                        title: "MODEL ADDED TO CART",
+                        text: "The model has been successfully added to your queue. You can continue shopping or proceed to your purchase page.",
+                        icon: "success",
+                        iconColor: "#10b981", // Emerald green
+                        background: "#0d1117",
+                        color: "#ffffff",
+                        showConfirmButton: true,
+                        confirmButtonText: "VIEW CART",
+                        showCancelButton: true,
+                        cancelButtonText: "KEEP BROWSING",
+                        buttonsStyling: false,
+                        customClass: {
+                            popup: "border border-white/10 rounded-[1.5rem] backdrop-blur-xl",
+                            title: "font-bold text-lg tracking-tight text-white",
+                            htmlContainer: "text-white/60 text-sm",
+                            confirmButton: "bg-blue-600 hover:bg-blue-500 text-white px-8 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider mx-2 transition-all shadow-lg shadow-blue-900/20",
+                            cancelButton: "bg-white/5 hover:bg-white/10 text-white/70 px-8 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider mx-2 transition-all"
+                        },
+                        showClass: {
+                            popup: "animate__animated animate__fadeInUp animate__faster"
+                        },
+                        hideClass: {
+                            popup: "animate__animated animate__fadeOutDown animate__faster"
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "/purchase";
+                        }
+                    });
+
+                })
+                .catch(() => {
+                    setIsOpen(false)
+                    Swal.fire({
+                        title: "MODEL ALREADY IN CART",
+                        text: "You have already added this model. Proceed to checkout to complete your purchase.",
+                        icon: "warning",
+                        iconColor: "#fbbf24", // Gold/Warning color
+                        background: "#0d1117",
+                        color: "#ffffff",
+                        showConfirmButton: true,
+                        confirmButtonText: "GO TO CHECKOUT",
+                        showCancelButton: true,
+                        cancelButtonText: "CONTINUE BROWSING",
+                        buttonsStyling: false,
+                        customClass: {
+                            popup: "border border-white/10 rounded-[1.5rem] backdrop-blur-xl",
+                            title: "font-bold text-lg tracking-tight text-white",
+                            htmlContainer: "text-white/60 text-sm",
+                            confirmButton: "bg-blue-600 hover:bg-blue-500 text-white px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider mx-2 transition-all",
+                            cancelButton: "bg-white/5 hover:bg-white/10 text-white/70 px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider mx-2 transition-all"
+                        },
+                        showClass: {
+                            popup: "animate__animated animate__fadeInUp animate__faster"
+                        },
+                        hideClass: {
+                            popup: "animate__animated animate__fadeOutDown animate__faster"
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "/purchase"; // Redirects to your purchase page
+                        }
+                    });
+
+                })
         }
         else {
             console.log('what kind of idiot you are to want to purchase own uploaded model')
@@ -104,7 +171,7 @@ const Modal = ({ model }) => {
                                     <h3 className="text-blue-400 font-bold text-xs uppercase tracking-[0.3em] mb-2">Specifications</h3>
                                     <div>
                                         <p className="text-xs text-gray-500 italic mt-1">
-                                            Uploaded by: <span className="font-medium text-gray-700">{modelData.uploadedBy}</span>
+                                            Uploaded by: <span className="font-medium text-gray-700">{modelData.insertedByEmail}</span>
                                         </p>
                                     </div>
                                 </div>

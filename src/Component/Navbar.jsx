@@ -19,10 +19,11 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+
     const navLinks = (
         <>
             <li className="relative group">
-                <NavLink to='/' className={({ isActive }) => 
+                <NavLink to='/' className={({ isActive }) =>
                     `px-3 py-2 transition-all duration-300 ${isActive ? 'text-blue-400' : 'text-white/70 hover:text-white'}`
                 }>
                     Home
@@ -30,7 +31,7 @@ const Navbar = () => {
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full" />
             </li>
             <li className="relative group">
-                <NavLink to='/allModels' className={({ isActive }) => 
+                <NavLink to='/allModels' className={({ isActive }) =>
                     `px-3 py-2 transition-all duration-300 ${isActive ? 'text-blue-400' : 'text-white/70 hover:text-white'}`
                 }>
                     All Models
@@ -38,7 +39,7 @@ const Navbar = () => {
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full" />
             </li>
             <li className="relative group">
-                <NavLink to='/addModels' className={({ isActive }) => 
+                <NavLink to='/addModels' className={({ isActive }) =>
                     `px-3 py-2 transition-all duration-300 ${isActive ? 'text-blue-400' : 'text-white/70 hover:text-white'}`
                 }>
                     Add Model
@@ -46,7 +47,7 @@ const Navbar = () => {
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full" />
             </li>
             <li className="relative group">
-                <NavLink to='/myModels' className={({ isActive }) => 
+                <NavLink to='/myModels' className={({ isActive }) =>
                     `px-3 py-2 transition-all duration-300 ${isActive ? 'text-blue-400' : 'text-white/70 hover:text-white'}`
                 }>
                     My Models
@@ -54,7 +55,7 @@ const Navbar = () => {
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full" />
             </li>
             <li className="relative group">
-                <NavLink to='/contact' className={({ isActive }) => 
+                <NavLink to='/contact' className={({ isActive }) =>
                     `px-3 py-2 transition-all duration-300 ${isActive ? 'text-blue-400' : 'text-white/70 hover:text-white'}`
                 }>
                     Contact Us
@@ -64,16 +65,41 @@ const Navbar = () => {
         </>
     );
 
+    {/* <li className="text-white/70 hover:text-blue-400 font-semibold cursor-pointer">My Purchase</li>
+    <li className="text-white/70 hover:text-blue-400 font-semibold cursor-pointer">Profile</li>
+    <li className="text-red-400/80 hover:text-red-400 font-bold cursor-pointer transition-colors">Logout</li> */}
+
+    const responsiveNavLinks = (
+        <>
+            <li className="relative group md:hidden">
+                <NavLink to='/purchase' className={({ isActive }) =>
+                    `px-3 py-2 transition-all duration-300 ${isActive ? 'text-blue-400' : 'text-white/70 hover:text-white'}`
+                }>
+                    Cart
+                </NavLink>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full" />
+            </li>
+
+           
+            {/* <li className="relative group">
+                <NavLink to='/' className={({ isActive }) =>
+                    `px-3 py-2 transition-all duration-300 ${isActive ? 'text-blue-400' : 'text-white/70 hover:text-white'}`
+                }>
+                    
+                </NavLink>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full" />
+            </li> */}
+        </>
+    )
+
     return (
-        <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
-            scrolled ? 'py-3 px-10' : 'py-6 px-5'
-        }`}>
-            <div className={`mx-auto flex justify-between items-center px-8 py-3 transition-all duration-500 rounded-full border border-white/10 ${
-                scrolled 
-                ? 'bg-black/60 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(0,0,0,0.8)]' 
-                : 'bg-transparent'
+        <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${scrolled ? 'py-3 px-10' : 'py-6 px-5'
             }`}>
-                
+            <div className={`mx-auto flex justify-between items-center px-8 py-3 transition-all duration-500 rounded-full border border-white/10 ${scrolled
+                ? 'bg-black/60 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(0,0,0,0.8)]'
+                : 'bg-transparent'
+                }`}>
+
                 {/* LEFT: Mobile Menu & Logo */}
                 <div className='flex items-center gap-6'>
                     <div className="relative lg:hidden">
@@ -93,10 +119,10 @@ const Navbar = () => {
                                 </svg>
                             </label>
                         </MenuToggleBtn>
-                        
+
                         <AnimatePresence>
                             {open && (
-                                <motion.div 
+                                <motion.div
                                     initial={{ opacity: 0, y: -20, scale: 0.95 }}
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     exit={{ opacity: 0, y: -20, scale: 0.95 }}
@@ -104,11 +130,9 @@ const Navbar = () => {
                                 >
                                     <ul className='flex flex-col gap-4'>
                                         {navLinks}
-                                        <div className="h-px bg-white/10 my-2" />
-                                        <li className="text-white/70 hover:text-blue-400 font-semibold cursor-pointer">My Purchase</li>
-                                        <li className="text-white/70 hover:text-blue-400 font-semibold cursor-pointer">Profile</li>
-                                        <li className="text-red-400/80 hover:text-red-400 font-bold cursor-pointer transition-colors">Logout</li>
-                                        <li className="pt-2"><Theme /></li>
+                                        {/* <div className="h-px bg-white/10 my-2" /> */}
+                                        {responsiveNavLinks}
+                                        {/* <li className="pt-2"><Theme /></li> */}
                                     </ul>
                                 </motion.div>
                             )}
@@ -133,14 +157,14 @@ const Navbar = () => {
                 </div>
 
                 {/* RIGHT: Actions */}
-                <div className='flex items-center gap-2 md:gap-4'>
+                <div className='flex items-center gap-2 md:gap-4 '>
                     <div className='hidden sm:block hover:scale-110 transition-transform'>
                         <Cart />
                     </div>
-                    <div className='hidden sm:block hover:scale-110 transition-transform'>
+                    {/* <div className='hidden sm:block hover:scale-110 transition-transform'>
                         <Theme />
-                    </div>
-                    <div className="pl-2 border-l border-white/10">
+                    </div> */}
+                    <div className="pl-2 border-l border-white/10 ">
                         <LoginAndProfile />
                     </div>
                 </div>

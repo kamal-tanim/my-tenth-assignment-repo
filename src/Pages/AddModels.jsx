@@ -23,7 +23,7 @@ const AddModels = () => {
         axios.post(image_API_URL, formData)
             .then(imgRes => {
                 const imgUrl = imgRes.data.data.url;
-                console.log(imgUrl)
+                // console.log(imgUrl)
 
                 const data = {
                     name: form.modelName.value,
@@ -43,7 +43,6 @@ const AddModels = () => {
                     .then(res => {
                         console.log("Model initialized:", res.data)
                         alert("Model Successfully Uploaded to the Archive.");
-
 
                     })
                     .catch(error => {
@@ -75,7 +74,7 @@ const AddModels = () => {
 
                 <form
                     onSubmit={handleAddModel}
-                    className="p-8 md:p-12 bg-white/5 border border-white/10 backdrop-blur-2xl rounded-[3rem] shadow-2xl grid grid-cols-2 md:grid-cols-2 gap-x-12 gap-y-8 relative overflow-hidden"
+                    className="p-8 md:p- bg-white/5 border border-white/10 backdrop-blur-2xl rounded-[3rem] shadow-2xl grid grid-cols-2 max-sm:grid-cols-1 gap-x-12 gap-y-8 relative overflow-hidden "
                 >
                     {/* Decorative Grid Lines */}
                     <div className="absolute inset-0 opacity-5 pointer-events-none"
@@ -147,7 +146,29 @@ const AddModels = () => {
                             <label className="!text-white/50">Created By</label>
                         </div>
                     </InputField>
+
+                     {/* here 7  */}
+                     <InputField>
+                        <div className="group">
+                            <input required type="number" min='1' max='5' className="input !text-white border-white/20" name="rating" step="0.1" />
+                            <span className="highlight" />
+                            <span className="bar !bg-blue-500" />
+                            <label className="!text-white/50">Performance Rating (1-5)</label>
+                        </div>
+                    </InputField>
+                    
+
                     <InputField>
+                        <div className="group">
+                            <input required type="datetime-local" className="input !text-white border-white/20 [color-scheme:dark]" name="createdAt" />
+                            <span className="highlight" />
+                            <span className="bar !bg-blue-500" />
+                        </div>
+                    </InputField>
+
+
+                        {/* here 9 */}
+                        <InputField>
                         <div className="group">
                             <p className="!text-white/50 text-xl">Inserted By</p>
                             <input
@@ -159,23 +180,7 @@ const AddModels = () => {
                             />    
                         </div>
                     </InputField>
-
-                    <InputField>
-                        <div className="group">
-                            <input required type="datetime-local" className="input !text-white border-white/20 [color-scheme:dark]" name="createdAt" />
-                            <span className="highlight" />
-                            <span className="bar !bg-blue-500" />
-                        </div>
-                    </InputField>
-
-                    <InputField>
-                        <div className="group">
-                            <input required type="number" min='1' max='5' className="input !text-white border-white/20" name="rating" step="0.1" />
-                            <span className="highlight" />
-                            <span className="bar !bg-blue-500" />
-                            <label className="!text-white/50">Performance Rating (1-5)</label>
-                        </div>
-                    </InputField>
+                    
 
                     <div className="">
                         <InputField>

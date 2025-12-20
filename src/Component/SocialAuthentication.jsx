@@ -21,6 +21,7 @@ const SocialAuthentication = () => {
   return (
     <GoogleBtn>
       <button
+      
         onClick={handleSocialAuthentication}
         className="btn">
         <svg xmlns="http://www.w3.org/2000/svg" style={{ display: 'inline-block', verticalAlign: 'middle' }} role="img" y={128} x={128} fill="#0092E4" viewBox="0 0 24 24" height="40px" width="40px">

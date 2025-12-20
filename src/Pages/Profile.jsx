@@ -60,7 +60,7 @@ const Profile = () => {
                                 <div className="absolute -inset-4 bg-blue-500/10 rounded-full blur-xl animate-pulse" />
                                 <div className="w-32 h-32 rounded-[2.5rem] border-2 border-blue-500/30 p-2 overflow-hidden bg-[#0a0a0a]">
                                     {user?.photoURL ? (
-                                        <img src={user.photoURL} className="w-full h-full object-cover rounded-[2rem]" alt="Profile" />
+                                        <img src={user?.photoURL} className="w-full h-full object-cover rounded-[2rem]" alt="Profile" />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center bg-white/5 rounded-[2rem]">
                                             <FaIdBadge size={40} className="text-white/20" />

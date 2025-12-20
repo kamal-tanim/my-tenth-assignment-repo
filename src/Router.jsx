@@ -45,15 +45,11 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'contact',
-                Component: Contact
+                element:<PrivateRoute><Contact></Contact></PrivateRoute>
             },
             {
                 path: 'purchase',
-                Component: Purchase
-            },
-            {
-                path: 'profile',
-                Component: Profile
+                element:<PrivateRoute><Purchase></Purchase></PrivateRoute>
             },
             {
                 path: 'login',

@@ -14,7 +14,7 @@ const LoginAndProfile = () => {
     };
 
     return (
-        <div className="dropdown dropdown-end">
+        <div className="dropdown dropdown-end ">
             {user ? (
                 <div className="flex items-center gap-4">
                     {/* AVATAR TRIGGER */}
@@ -29,20 +29,14 @@ const LoginAndProfile = () => {
                         <div className="absolute -inset-1.5 border border-blue-500/30 rounded-full animate-[spin_4s_linear_infinite] group-hover:border-blue-500 transition-colors" />
                         
                         <div className='relative h-10 w-10 bg-[#0a0a0a] border border-white/20 rounded-full flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(0,0,0,0.5)]'>
-                            {user?.photoURL ? (
-                                <img src={user.photoURL} className="h-full w-full object-cover" alt="Identity" />
-                            ) : (
-                                <FaUserTie className='h-5 w-5 text-blue-400' />
-                            )}
-                            {/* Online Status Dot */}
-                            <div className="absolute bottom-0 right-0 h-2.5 w-2.5 bg-green-500 border-2 border-[#0a0a0a] rounded-full" />
+                                <img src={user?.photoURL} className="h-full w-full object-cover" alt="" />
                         </div>
                     </motion.div>
 
                     {/* DROPDOWN MENU - mt-12 pushes the whole card down from the avatar */}
                     <ul
                         tabIndex={0}
-                        className="dropdown-content z-[100] mt-12 w-80 origin-top-right overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#070707]/95 backdrop-blur-3xl shadow-[0_25px_60px_rgba(0,0,0,0.8)] p-6"
+                        className="dropdown-content z-[100] mt-50 w-80 overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#070707]/95 backdrop-blur-3xl shadow-[0_25px_60px_rgba(0,0,0,0.8)] p-6 "
                     >
                         {/* USER INFO HEADER - pt-12 pushes text down inside the box */}
                         <div className="relative mb-3 p-6 pt-12 bg-white/5 border border-white/5 rounded-3xl overflow-hidden flex flex-col gap-1">
@@ -63,6 +57,7 @@ const LoginAndProfile = () => {
                             <p className="text-[11px] text-white/30 font-medium truncate italic">
                                 {user?.email}
                             </p>
+                            <Link to='/profile'><button className="text-blue-600">Profile</button> </Link>
                         </div>
 
                         {/* NAVIGATION LINKS */}
@@ -77,7 +72,7 @@ const LoginAndProfile = () => {
                                 >
                                     <div className="flex items-center gap-3">
                                         <FaSignOutAlt className="group-hover:-translate-x-1 transition-transform" />
-                                        <span className="text-[10px] font-black uppercase tracking-widest">Terminate Link</span>
+                                        <span className="text-[10px] font-black uppercase tracking-widest">Logout</span>
                                     </div>
                                 </button>
                             </div>
@@ -93,7 +88,7 @@ const LoginAndProfile = () => {
                         className="px-8 py-3 bg-white text-black rounded-full font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-3 transition-shadow hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]"
                     >
                         <FaShieldAlt className="text-blue-600" />
-                        Authorize Access
+                        Login
                     </motion.div>
                 </Link>
             )}
