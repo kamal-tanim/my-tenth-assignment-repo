@@ -7,11 +7,14 @@ import SocialAuthentication from '../Component/SocialAuthentication';
 import useAuth from '../hooks/useAuth';
 import { FaUserPlus, FaFingerprint, FaShieldAlt, FaIdCard, FaArrowRight } from 'react-icons/fa';
 import axios from 'axios';
+import useAxiosSecure from '../hooks/useAxiosSecure';
+import Swal from 'sweetalert2';
 
 const Register = () => {
-    const { registerUser, updateUser, setUser } = useAuth();
+    const { registerUser, updateUser } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
+    const axiosSecure = useAxiosSecure();
 
     const handleRegister = (e) => {
         e.preventDefault();
@@ -21,9 +24,8 @@ const Register = () => {
         const password = form.password.value
         const firstName = form.firstName.value;
         const lastName = form.lastName.value;
-
         const name = `${firstName} ${lastName}`.trim();
-        console.log(name);
+
 
         registerUser(email, password)
             .then(() => {
@@ -36,20 +38,84 @@ const Register = () => {
                     .then(result => {
                         const imgUrl = result.data.data.url;
                         console.log(imgUrl);
-                        const updatedUser = { displayName: name, photoURL: imgUrl } 
+                        const updatedUser = { displayName: name, photoURL: imgUrl }
                         updateUser(updatedUser)
                             .then(() => {
-                                navigate(location?.state);
+                                const userData = {
+                                    email: form.email.value,
+                                    image: imgUrl,
+                                    firstName: form.firstName.value,
+                                    lastName: form.lastName.value
+                                }
+
+                                axiosSecure.post('/users', userData)
+                                    .then(() => {
+                                        Swal.fire({
+                                            title: "Access Granted",
+                                            text: "Welcome to the Neural Archive. Your account is now active.",
+                                            icon: "success",
+                                            iconColor: "#3b82f6", // Blue-500 to match your theme
+                                            background: "#0a0a0a", // Dark background
+                                            color: "#ffffff",
+                                            confirmButtonText: "Enter Dashboard",
+                                            confirmButtonColor: "#2563eb", // Blue-600
+                                            customClass: {
+                                                popup: 'rounded-[2rem] border border-white/10 backdrop-blur-md',
+                                                title: 'text-2xl font-black uppercase italic tracking-tighter',
+                                            },
+                                            showClass: {
+                                                popup: 'animate__animated animate__zoomIn animate__faster'
+                                            },
+                                            hideClass: {
+                                                popup: 'animate__animated animate__fadeOut animate__faster'
+                                            }
+                                        });
+                                    })
+                                navigate(location?.state || '/');
                             })
                             .catch(err => {
-                                console.log(err);
+
                             })
 
                     })
 
             })
             .catch((error) => {
-                console.log(error);
+                let errorMessage = "An unexpected neural interference occurred.";
+                let errorTitle = "System Error";
+
+                if (error.code === 'auth/email-already-in-use') {
+                    errorTitle = "Identity Conflict";
+                    errorMessage = "This Email is already registered in the archive. Please log in or use a different ID.";
+                } else if (error.code === 'auth/weak-password') {
+                    errorTitle = "Security Protocol";
+                    errorMessage = "Password strength insufficient. Minimum 6 characters required.";
+                } else if (error.code === 'auth/invalid-email') {
+                    errorTitle = "Format Error";
+                    errorMessage = "The provided email format is invalid.";
+                }
+
+                // 2. Execute the SweetAlert2 directly
+                Swal.fire({
+                    title: errorTitle,
+                    text: errorMessage,
+                    icon: "error",
+                    iconColor: "#ef4444",
+                    background: "#0a0a0a",
+                    color: "#ffffff",
+                    confirmButtonText: "Recalibrate",
+                    confirmButtonColor: "#3b82f6",
+                    customClass: {
+                        popup: 'rounded-[2rem] border border-red-500/20 backdrop-blur-md shadow-[0_0_40px_rgba(239,68,68,0.1)]',
+                        title: 'text-2xl font-black uppercase tracking-tighter text-red-500',
+                    },
+                    showClass: {
+                        popup: 'animate__animated animate__headShake'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOut'
+                    }
+                });
             });
 
 
